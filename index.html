@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Exemplo de Leaflet para o Maranhão</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Adicione o CSS do Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+    <!-- Adicione o JavaScript do Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Adicione o CSS personalizado -->
+    <style>
+      #mapid {
+        height: 500px;
+      }
+    </style>
+  </head>
+  <body style="background-color:blue;">
+<h1 style="color:white;">EXEMPLO MAPA DO MARANHÃO </h1>
+    <div id="mapid"></div>
+
+    <!-- Adicione o JavaScript personalizado -->
+<script>
+  // Crie um mapa centrado no Maranhão
+  var map = L.map("mapid").setView([-5.2928681,-45.1841608], 7);
+
+  // Adicione um tile layer do OpenStreetMap
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors",
+    maxZoom: 18,
+  }).addTo(map);
+
+  // Crie um array com as cidades do Maranhão e seus valores
+  var cities = [
+    { name: "São Luís", value: 100 },
+    { name: "Imperatriz", value: 200 },
+    { name: "Timon", value: 300 },
+    { name: "Caxias", value: 400 },
+    // Adicione mais cidades e valores aqui...
+  ];
+
+  // Adicione um marcador para cada cidade do Maranhão
+  cities.forEach(function (city) {
+    // Crie um ícone personalizado para o marcador, com base no valor da cidade
+    var icon = L.icon({
+      iconUrl: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-"+getColor(city.value)+".png",
+      shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+
+    // Crie um marcador para a cidade
+    var marker = L.marker(getCityLatLng(city.name), { icon: icon }).addTo(map);
+
+    // Adicione um popup com o nome da cidade e o valor associado
+    marker.bindPopup("<b>" + city.name + "</b><br>" + "Valor: R$ " + city.value);
+  });
+
+  // Função para obter a latitude e longitude de uma cidade
+  function getCityLatLng(cityName) {
+    // Adicione aqui um objeto com as coordenadas de cada cidade do Maranhão
+     var citiesLatLng = {
+        "São Luís": [-2.5388, -44.2826],
+        "Imperatriz": [-5.5275, -47.4914],
+        "Timon": [-5.0977, -42.8248],
+        "Caxias": [-4.865, -43.3617],
+        // Adicione mais cidades e coordenadas aqui...
+      };
+
+    // Verifique se a cidade está no objeto
+    if (cityName in citiesLatLng) {
+      // Se sim, retorne as coordenadas
+      return citiesLatLng[cityName];
+    } else {
+      // Se não, retorne null
+      return null;
+    }
+  }
+      function getColor(value) {
+        if (value < 150) {
+          return "blue";
+        } else if (value < 300) {
+          return "green";
+        } else {
+          return "red";
+        }
+      }
+</script>
